@@ -27,9 +27,6 @@
     <ClCompile Include="dmath.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="childframes.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="image_editor.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>

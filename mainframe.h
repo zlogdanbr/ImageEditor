@@ -32,7 +32,7 @@
 #include <chrono>
 
 
-class MyFrame : public wxFrame
+class MyFrame : public wxMDIParentFrame
 {
 public:
 

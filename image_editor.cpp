@@ -37,7 +37,7 @@ void CImageCustomDialog::setControlslayout()
 }
 
 
-CImageCustomDialog::CImageCustomDialog(wxFrame* parent) :CInputDialogBase{ parent,"Image Editor" }
+CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFrame(parent, wxID_ANY, "Image Editor")
 {
 
     memset(myrgb, 0x00, 3);

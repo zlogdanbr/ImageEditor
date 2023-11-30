@@ -1,8 +1,8 @@
 
 #include "mainframe.h"
+#include "childframes.h"
 
-
-MyFrame::MyFrame() :wxFrame{ nullptr, -1, "diMage", wxPoint(-1, -1) }
+MyFrame::MyFrame():wxMDIParentFrame(nullptr, wxID_ANY, "Image Editor")
 {
     SetClientSize(640, 480);
     wxInitAllImageHandlers();
@@ -52,7 +52,9 @@ MyFrame::MyFrame() :wxFrame{ nullptr, -1, "diMage", wxPoint(-1, -1) }
 
 void MyFrame::OnOpen(wxCommandEvent & event)
 {
-
+    auto child = new CImageCustomDialog(this);
+    child->Maximize();
+    child->Show();
 }
 
 void MyFrame::onHelpFile(wxCommandEvent& event)

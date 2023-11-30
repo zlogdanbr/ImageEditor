@@ -35,25 +35,6 @@ using CDataValue = std::vector<CPointCst>;
 using RGB_CST = unsigned char[3];
 
 
-class CInputDialogBase : public wxFrame
-{
-public:
-
-    CInputDialogBase(wxFrame* parent, wxString name);
-
-protected:
-
-    //--------------------------------------------------------------
-    // Helpers
-    //--------------------------------------------------------------
-
-    // https://truelogic.org/wordpress/2021/12/17/5b-1-wxwidgets-wxboxsizer/
-    virtual void setControlslayout() = 0;
-
-};
-
-
-
 class CDataCapture : public CDataValue
 {
 public:
@@ -80,11 +61,11 @@ public:
 };
 
 
-class CImageCustomDialog : public CInputDialogBase
+class CImageCustomDialog : public wxMDIChildFrame
 {
 public:
 
-    CImageCustomDialog(wxFrame* parent);
+    CImageCustomDialog(wxMDIParentFrame* parent);
 
     void loadImage();
     void SaveImage();
@@ -128,7 +109,7 @@ private:
 
     bool pog_mirror = false;
 
-    void setControlslayout() override;
+    void setControlslayout();
 
     CDataCapture c;
 
