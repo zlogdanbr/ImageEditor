@@ -2,39 +2,6 @@
 #include "wxwimage_algos.h"
 #include <wx/colordlg.h>
 
-void CImageCustomDialog::setControlslayout()
-{
-    // set base sizer
-    this->SetSize(710, 710);
-    basePanel->SetSize(710, 710);
-    basePanel->SetSizer(baseSizer);
-
-    // add buttons to the horizontal box
-    vbox1->Add(button5);
-    vbox1->Add(button2);
-    vbox1->Add(button3);
-    vbox1->Add(button6);
-    vbox1->Add(button4);
-    vbox1->Add(button8);
-    vbox1->Add(button9);
-    vbox1->Add(button10);
-    vbox1->Add(button11);
-    vbox1->Add(button12);
-    vbox1->Add(button13);
-    vbox1->Add(button14);
-
-    vbox2->Add(picture, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);// wxALIGN_CENTER_HORIZONTAL
-
-    // set horizontal base sizer at panel1 and panel2
-    panel1->SetSizer(vbox1);
-    panel2->SetSizer(vbox2);
-
-    // add panel1 to the base sizer at the base panel
-    baseSizer->Add(panel1);
-    baseSizer->Add(panel2);
-
-    Center();
-}
 
 
 CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFrame(parent, wxID_ANY, "Image Editor")
@@ -43,6 +10,8 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
     memset(myrgb, 0x00, 3);
 
     setControlslayout();
+
+    //this->Bind(wxWin)
 
     button2->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
@@ -210,12 +179,21 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
 
             if (image.IsOk())
             {
+                Dimensions d;
+                auto _h = image.GetHeight();
+                auto _w = image.GetWidth();
+                d.first = _h;
+                d.second = _w;
+
+                reloadImage(d.first, d.second);
+
                 wxPoint p = event.GetPosition();
                 int x = p.x;
                 int y = p.y;
                 wxSize s(5, 5);
                 wxRect rect(p, s);
                 image.SetRGB(rect, myrgb[0], myrgb[1], myrgb[2]);
+
                 reloadImage(-1, -1);
                 //Refresh();
             }
@@ -240,6 +218,40 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
         });
 
 
+}
+
+void CImageCustomDialog::setControlslayout()
+{
+    // set base sizer
+    this->SetSize(710, 710);
+    basePanel->SetSize(710, 710);
+    basePanel->SetSizer(baseSizer);
+
+    // add buttons to the horizontal box
+    vbox1->Add(button5);
+    vbox1->Add(button2);
+    vbox1->Add(button3);
+    vbox1->Add(button6);
+    vbox1->Add(button4);
+    vbox1->Add(button8);
+    vbox1->Add(button9);
+    vbox1->Add(button10);
+    vbox1->Add(button11);
+    vbox1->Add(button12);
+    vbox1->Add(button13);
+    vbox1->Add(button14);
+
+    vbox2->Add(picture, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);// wxALIGN_CENTER_HORIZONTAL
+
+    // set horizontal base sizer at panel1 and panel2
+    panel1->SetSizer(vbox1);
+    panel2->SetSizer(vbox2);
+
+    // add panel1 to the base sizer at the base panel
+    baseSizer->Add(panel1);
+    baseSizer->Add(panel2);
+
+    Center();
 }
 
 void CImageCustomDialog::loadImage()
