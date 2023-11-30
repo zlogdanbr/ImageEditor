@@ -11,7 +11,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
 
     setControlslayout();
 
-    //this->Bind(wxWin)
+    c.clear_me();
 
     button2->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
@@ -194,6 +194,11 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                 wxRect rect(p, s);
                 image.SetRGB(rect, myrgb[0], myrgb[1], myrgb[2]);
 
+                if (capture == true)
+                {
+                    c.insertPoint(x, y);
+                }
+
                 reloadImage(-1, -1);
                 //Refresh();
             }
@@ -217,7 +222,57 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
             }
         });
 
+    button15->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
+        {
+            if (image.IsOk())
+            {   
+                capture = true;
+            }
+        });
 
+    button16->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
+        {
+
+            if (capture == false)
+            {
+                return;
+            }
+
+            if (image.IsOk())
+            {
+                
+
+                for (int i = 0; i < image.GetWidth(); i++)
+                {
+                    for (int j = 0; j < image.GetHeight(); j++)
+                    {
+                        if (isPointAtRegion(i, j) == false)
+                        {
+                            image.SetRGB(i,j, 0xFF, 0xFF, 0xFF);
+                        }
+                    }
+                }
+
+                Dimensions d;
+                auto _h = image.GetHeight();
+                auto _w = image.GetWidth();
+                d.first = _h;
+                d.second = _w;
+
+                reloadImage(d.first, d.second);
+
+                c.clear();
+
+                capture = false;
+            }
+        });
+
+
+}
+
+bool CImageCustomDialog::isPointAtRegion(int x, int y)
+{
+    return c.isPointInThePicture(x, y);
 }
 
 void CImageCustomDialog::setControlslayout()
@@ -240,6 +295,8 @@ void CImageCustomDialog::setControlslayout()
     vbox1->Add(button12);
     vbox1->Add(button13);
     vbox1->Add(button14);
+    vbox1->Add(button15);
+    vbox1->Add(button16);
 
     vbox2->Add(picture, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);// wxALIGN_CENTER_HORIZONTAL
 

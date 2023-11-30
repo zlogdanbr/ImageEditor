@@ -77,6 +77,8 @@ public:
 
 private:
 
+    bool isPointAtRegion(int x, int y);
+
     int w = 0;
     int h = 0;
 
@@ -100,6 +102,9 @@ private:
     wxButton* button12{ new wxButton(panel1, wxID_ANY, "Blur") };
     wxButton* button13{ new wxButton(panel1, wxID_ANY, "Gray") };
     wxButton* button14{ new wxButton(panel1, wxID_ANY, "Color") };
+
+    wxButton* button15{ new wxButton(panel1, wxID_ANY, "Capture") };
+    wxButton* button16{ new wxButton(panel1, wxID_ANY, "BackBlur") };
 
 
     wxImage image;

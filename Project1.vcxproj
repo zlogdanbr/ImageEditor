@@ -246,8 +246,7 @@
       <AdditionalDependencies>wxbase32u.lib;wxmsw32u_core.lib;opencv_world480.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy C:\Users\Administrador\Documents\GitHub\ImageEditor\x64\Release\diMageEditor.exe C:\tools\diMageEditor</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release45|x64'">
