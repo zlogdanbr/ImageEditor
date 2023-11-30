@@ -68,7 +68,11 @@ void MyFrame::OnExit(wxCommandEvent& event)
 
 void MyFrame::OnClose(wxCommandEvent& event)
 {
-    mdi_panel_child->Close();
+    if (mdi_panel_child != nullptr)
+    {
+        mdi_panel_child->Close();
+        mdi_panel_child = nullptr;
+    }
 }
 
 void MyFrame::OnSave(wxCommandEvent& event)
