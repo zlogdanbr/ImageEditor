@@ -1,6 +1,5 @@
 
 #include "mainframe.h"
-#include "childframes.h"
 
 MyFrame::MyFrame():wxMDIParentFrame(nullptr, wxID_ANY, "Image Editor")
 {
@@ -52,9 +51,9 @@ MyFrame::MyFrame():wxMDIParentFrame(nullptr, wxID_ANY, "Image Editor")
 
 void MyFrame::OnOpen(wxCommandEvent & event)
 {
-    auto child = new CImageCustomDialog(this);
-    child->Maximize();
-    child->Show();
+    mdi_panel_child = new CImageCustomDialog(this);
+    mdi_panel_child->Maximize();
+    mdi_panel_child->Show();
 }
 
 void MyFrame::onHelpFile(wxCommandEvent& event)
@@ -69,7 +68,7 @@ void MyFrame::OnExit(wxCommandEvent& event)
 
 void MyFrame::OnClose(wxCommandEvent& event)
 {
-
+    mdi_panel_child->Close();
 }
 
 void MyFrame::OnSave(wxCommandEvent& event)

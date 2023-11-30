@@ -30,6 +30,7 @@
 #include <stack>
 #include <deque>
 #include <chrono>
+#include "childframes.h"
 
 
 class MyFrame : public wxMDIParentFrame
@@ -37,6 +38,9 @@ class MyFrame : public wxMDIParentFrame
 public:
 
     MyFrame();
+
+
+    CImageCustomDialog* getChildFrame() { return mdi_panel_child; };
 
 private:
 
@@ -47,6 +51,7 @@ private:
     //--------------------------------------------------------------
 
     wxPanel* main_panel = nullptr;
+    CImageCustomDialog* mdi_panel_child = nullptr;
 
     //---------------------------------------------------------------
     // event handlers------------------------------------------------
