@@ -103,8 +103,8 @@ private:
     wxButton* button13{ new wxButton(panel1, wxID_ANY, "Gray") };
     wxButton* button14{ new wxButton(panel1, wxID_ANY, "Color") };
 
-    wxButton* button15{ new wxButton(panel1, wxID_ANY, "Capture") };
-    wxButton* button16{ new wxButton(panel1, wxID_ANY, "BackBlur") };
+    wxButton* button15{ new wxButton(panel1, wxID_ANY, "Start") };
+    wxButton* button16{ new wxButton(panel1, wxID_ANY, "Stop") };
 
 
     wxImage image;

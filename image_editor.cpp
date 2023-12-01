@@ -177,30 +177,34 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
     picture->Bind(wxEVT_LEFT_DOWN, [&](wxMouseEvent& event)
         {
 
-            if (image.IsOk())
+            if (capture == true)
             {
-                Dimensions d;
-                auto _h = image.GetHeight();
-                auto _w = image.GetWidth();
-                d.first = _h;
-                d.second = _w;
 
-                reloadImage(d.first, d.second);
-
-                wxPoint p = event.GetPosition();
-                int x = p.x;
-                int y = p.y;
-                wxSize s(5, 5);
-                wxRect rect(p, s);
-                image.SetRGB(rect, myrgb[0], myrgb[1], myrgb[2]);
-
-                if (capture == true)
+                if (image.IsOk())
                 {
-                    c.insertPoint(x, y);
-                }
+                    Dimensions d;
+                    auto _h = image.GetHeight();
+                    auto _w = image.GetWidth();
+                    d.first = _h;
+                    d.second = _w;
 
-                reloadImage(-1, -1);
-                //Refresh();
+                    //reloadImage(d.first, d.second);
+
+                    wxPoint p = event.GetPosition();
+                    int x = p.x;
+                    int y = p.y;
+                    wxSize s(5, 5);
+                    wxRect rect(p, s);
+                    image.SetRGB(rect, myrgb[0], myrgb[1], myrgb[2]);
+
+                    if (capture == true)
+                    {
+                        c.insertPoint(x, y);
+                    }
+
+                    reloadImage(-1, -1);
+                    //Refresh();
+                }
             }
         });
 
@@ -239,30 +243,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
             }
 
             if (image.IsOk())
-            {
-                
-
-                for (int i = 0; i < image.GetWidth(); i++)
-                {
-                    for (int j = 0; j < image.GetHeight(); j++)
-                    {
-                        if (isPointAtRegion(i, j) == false)
-                        {
-                            image.SetRGB(i,j, 0xFF, 0xFF, 0xFF);
-                        }
-                    }
-                }
-
-                Dimensions d;
-                auto _h = image.GetHeight();
-                auto _w = image.GetWidth();
-                d.first = _h;
-                d.second = _w;
-
-                reloadImage(d.first, d.second);
-
-                c.clear();
-
+            {                
                 capture = false;
             }
         });
