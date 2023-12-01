@@ -91,7 +91,7 @@ private:
     wxBoxSizer* vbox2{ new wxBoxSizer(wxVERTICAL) };
 
     wxButton* button5{ new wxButton(panel1, wxID_ANY, "Load") };
-    wxButton* button2{ new wxButton(panel1, wxID_ANY, "Cancel") };
+    wxButton* button2{ new wxButton(panel1, wxID_ANY, "Close") };
     wxButton* button3{ new wxButton(panel1, wxID_ANY, "Rescale-") };
     wxButton* button6{ new wxButton(panel1, wxID_ANY, "Rescale+") };
     wxButton* button4{ new wxButton(panel1, wxID_ANY, "Save") };        
@@ -105,9 +105,12 @@ private:
 
     wxButton* button15{ new wxButton(panel1, wxID_ANY, "Start") };
     wxButton* button16{ new wxButton(panel1, wxID_ANY, "Stop") };
+    wxButton* button17{ new wxButton(panel1, wxID_ANY, "Undo") };
+
 
 
     wxImage image;
+    wxImage backup;
     wxStaticBitmap* picture = new wxStaticBitmap(   panel2, wxID_ANY, wxNullBitmap, { -1,-1 }, {700,700}, wxBORDER_SUNKEN);
 
     std::vector<int> resize_factor;
@@ -119,6 +122,7 @@ private:
     CDataCapture c;
 
     bool capture = false;
+    bool changed = false;
 
     RGB_CST myrgb;
 
