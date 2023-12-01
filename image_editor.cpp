@@ -13,6 +13,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
 
     c.clear_me();
 
+
     button2->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             // cancel
@@ -33,7 +34,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                     wxImage image2 = scaleLessImage(image, scale, d);
                     image = image2.Copy();
                     image2.Clear();
-                    reloadImage(d.first, d.second);
+                    reloadImage();
                     changed = true;
                     return;
                 }
@@ -56,7 +57,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                     wxImage image2 = scalePlusImage(image, scale, d);
                     image = image2.Copy();
                     image2.Clear();
-                    reloadImage(d.first, d.second);
+                    reloadImage();
                     changed = true;
                     return;
                 }
@@ -88,7 +89,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                 image = image2.Copy();
                 image2.Clear();
                 image2.Destroy();
-                reloadImage(-1,-1);
+                reloadImage();
                 changed = true;
                 return;
             }
@@ -104,7 +105,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                 image = image2.Copy();
                 image2.Clear();
                 image2.Destroy();
-                reloadImage(-1,-1);
+                reloadImage();
                 changed = true;
                 return;
             }
@@ -125,7 +126,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                     wxImage image2 = BlurH(image, scale);
                     image = image2.Copy();
                     image2.Clear();
-                    reloadImage(-1, -1);
+                    reloadImage();
                     changed = true;
                     return;
                 }
@@ -145,7 +146,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                     wxImage image2 = BlurV(image, scale);
                     image = image2.Copy();
                     image2.Clear();
-                    reloadImage(-1, -1);
+                    reloadImage();
                     changed = true;
                     return;
                 }
@@ -165,7 +166,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                     wxImage image2 = Blur(image, scale);
                     image = image2.Copy();
                     image2.Clear();
-                    reloadImage(-1, -1);
+                    reloadImage();
                     changed = true;
                     return;
                 }
@@ -182,7 +183,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                 image = image2.Copy();
                 image2.Clear();
                 image2.Destroy();
-                reloadImage(-1, -1);
+                reloadImage();
                 changed = true;                
                 return;
             }
@@ -225,7 +226,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                         c.insertPoint(x, y);
                     }
 
-                    reloadImage(-1, -1);
+                    reloadImage();
                 }
             }
         });
@@ -282,7 +283,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                     if (backup.IsOk())
                     {
                         image = backup.Copy();
-                        reloadImage(-1, -1);
+                        reloadImage();
                     }
                 }
                 else
@@ -290,7 +291,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                     if (changed == true)
                     {
                         image = backup.Copy();
-                        reloadImage(-1, -1);
+                        reloadImage();
                         changed = false;
                         backup.Clear();
                         backup.Destroy();
@@ -369,20 +370,17 @@ void CImageCustomDialog::loadImage()
     }
 }
 
-void CImageCustomDialog::reloadImage(int factor1,int factor2)
+void CImageCustomDialog::reloadImage()
 {
     if (image.IsOk() == true)
     {
-        if (factor1 > 0 && factor2 > 0)
-        {
-            wxBitmap bitMap{ wxBitmap(image.Rescale(factor1, factor2, wxIMAGE_QUALITY_HIGH)) };
-            picture->SetBitmap(bitMap);
-            picture->SetSize(factor1, factor2);
-            return;
-        }
+
+        w = image.GetWidth();
+        h = image.GetHeight();
 
         wxBitmap bitMap{ wxBitmap(image) };
         picture->SetBitmap(bitMap);
+        picture->SetSize(w, h);
 
     }
 }

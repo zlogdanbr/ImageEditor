@@ -69,7 +69,7 @@ public:
 
     void loadImage();
     void SaveImage();
-    void reloadImage(int factor1 = 710, int factor2 = 710);
+    void reloadImage();
 
     wxImage getImage() { return image; };
     
