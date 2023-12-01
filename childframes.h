@@ -90,7 +90,7 @@ private:
     wxBoxSizer* vbox1{ new wxBoxSizer(wxVERTICAL) };
     wxBoxSizer* vbox2{ new wxBoxSizer(wxVERTICAL) };
 
-    wxButton* button5{ new wxButton(panel1, wxID_ANY, "Load") };
+    wxButton* button5{ new wxButton(panel1, wxID_ANY, "Open") };
     wxButton* button2{ new wxButton(panel1, wxID_ANY, "Close") };
     wxButton* button3{ new wxButton(panel1, wxID_ANY, "Rescale-") };
     wxButton* button6{ new wxButton(panel1, wxID_ANY, "Rescale+") };

@@ -39,6 +39,20 @@ public:
 
     MyFrame();
 
+    ~MyFrame()
+    {
+        for (auto& mdichild : mdi_panel_child_frames)
+        {
+            if (mdichild != nullptr)
+            {
+                //delete mdichild;
+                mdichild = nullptr;
+            }
+        }
+
+        mdi_panel_child_frames.clear();
+
+    }
 
     CImageCustomDialog* getChildFrame() { return mdi_panel_child; };
 
@@ -52,6 +66,7 @@ private:
 
     wxPanel* main_panel = nullptr;
     CImageCustomDialog* mdi_panel_child = nullptr;
+    std::vector<  CImageCustomDialog* > mdi_panel_child_frames;
 
     //---------------------------------------------------------------
     // event handlers------------------------------------------------

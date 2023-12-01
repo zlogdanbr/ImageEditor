@@ -51,9 +51,9 @@ MyFrame::MyFrame():wxMDIParentFrame(nullptr, wxID_ANY, "Image Editor")
 
 void MyFrame::OnOpen(wxCommandEvent & event)
 {
-    mdi_panel_child = new CImageCustomDialog(this);
-    mdi_panel_child->Maximize();
-    mdi_panel_child->Show();
+    CImageCustomDialog* tmp{ new CImageCustomDialog(this) };
+    tmp->Show();
+    mdi_panel_child_frames.push_back(tmp);
 }
 
 void MyFrame::onHelpFile(wxCommandEvent& event)
@@ -68,11 +68,11 @@ void MyFrame::OnExit(wxCommandEvent& event)
 
 void MyFrame::OnClose(wxCommandEvent& event)
 {
-    if (mdi_panel_child != nullptr)
-    {
-        mdi_panel_child->Close();
-        mdi_panel_child = nullptr;
-    }
+    //if (mdi_panel_child != nullptr)
+    //{
+    //    mdi_panel_child->Close();
+    //    mdi_panel_child = nullptr;
+    //}
 }
 
 void MyFrame::OnSave(wxCommandEvent& event)
