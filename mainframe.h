@@ -1,9 +1,3 @@
-//--------------------------------------------------------------------------------------------------
-// Main frame of the application, a rather simple WxWigets UI
-// author: Daniel Vasconcelos Gomes 2023
-// if an external code has been used I indicate the sources
-//--------------------------------------------------------------------------------------------------
-
 #ifndef _MAIN_FRAME_MY_APP_DVG_
 #define _MAIN_FRAME_MY_APP_DVG_
 
