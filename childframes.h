@@ -6,9 +6,6 @@
 #ifndef _CHILD_FRAME_DEFS_
 #define _CHILD_FRAME_DEFS_
 
-
-
-#include <functional>
 #include <wx/numdlg.h>
 #include <wx/wx.h>
 #include <wx/progdlg.h>
@@ -20,6 +17,7 @@
 #include <wx/stdpaths.h>
 #include <wx/artprov.h>
 #include<opencv2/highgui/highgui.hpp>
+#include <wx/aboutdlg.h>
 #include <memory>
 #include <map>
 #include <iostream>

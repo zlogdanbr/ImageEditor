@@ -6,6 +6,9 @@ MyFrame::MyFrame():wxMDIParentFrame(nullptr, wxID_ANY, "Image Editor")
     SetClientSize(640, 480);
     wxInitAllImageHandlers();
 
+    wxIcon icon("../../app.ico");
+    SetIcon(icon);
+
     // ------------------------------------------------------------------------------  
     // menu   file
     // ------------------------------------------------------------------------------  
@@ -58,7 +61,17 @@ void MyFrame::OnOpen(wxCommandEvent & event)
 
 void MyFrame::onHelpFile(wxCommandEvent& event)
 {
-
+    wxAboutDialogInfo aboutInfo;
+    aboutInfo.SetName(wxTheApp->GetAppName());
+    aboutInfo.SetVersion("1.0", "1.0.1");
+    aboutInfo.SetDescription("Image Editor Tool");
+    aboutInfo.SetWebSite("http://zlogdan.wordpress.com");
+    aboutInfo.SetLicence("GNU GENERAL PUBLIC LICENSE GPLv3");
+    wxArrayString Dev;
+    wxString _me_ = "Daniel Vasconcelos Gomes";
+    Dev.Add(_me_);
+    aboutInfo.SetDevelopers(Dev);
+    wxAboutBox(aboutInfo);
 }
 
 void MyFrame::OnExit(wxCommandEvent& event)
