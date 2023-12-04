@@ -3,13 +3,10 @@
 
 MyFrame::MyFrame():wxMDIParentFrame(nullptr, wxID_ANY, "Image Editor")
 {
-    SetClientSize(1080, 960);
+    SetClientSize(APP_DEFAULT_W, APP_DEFAULT_H);
     wxInitAllImageHandlers();
 
-    wxIcon icon("../../app.ico");
-    SetIcon(icon);
-
-    // ------------------------------------------------------------------------------  
+     // ------------------------------------------------------------------------------  
     // menu   file
     // ------------------------------------------------------------------------------  
     auto menuFile = new wxMenu();

@@ -3,6 +3,42 @@
 #include <wx/colordlg.h>
 
 
+void CImageCustomDialog::setControlslayout()
+{
+    // set base sizer
+    this->SetSize(CHILD_DEFAULT_W, CHILD_DEFAULT_H);
+    basePanel->SetSize(CHILD_DEFAULT_W, CHILD_DEFAULT_H);
+    basePanel->SetSizer(baseSizer);
+
+    // add buttons to the horizontal box
+    vbox1->Add(button5);
+    vbox1->Add(button2);
+    vbox1->Add(button3);
+    vbox1->Add(button6);
+    vbox1->Add(button4);
+    vbox1->Add(button8);
+    vbox1->Add(button9);
+    vbox1->Add(button10);
+    vbox1->Add(button11);
+    vbox1->Add(button12);
+    vbox1->Add(button13);
+    vbox1->Add(button14);
+    vbox1->Add(button17);
+
+    vbox2->Add( image_canvas, 
+                wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);// wxALIGN_CENTER_HORIZONTAL
+
+    // set horizontal base sizer at panel1 and panel2
+    panel1->SetSizer(vbox1);
+    panel2->SetSizer(vbox2);
+
+    // add panel1 to the base sizer at the base panel
+    baseSizer->Add(panel1);
+    baseSizer->Add(panel2);
+
+    Center();
+}
+
 
 CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFrame(parent, wxID_ANY, "Image Editor")
 {
@@ -11,18 +47,21 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
 
     setControlslayout();
 
-
     this->Bind(wxEVT_MAXIMIZE, [&](wxMaximizeEvent& event)
         {
 
         });
 
+    image_canvas->Bind(wxEVT_LEFT_DOWN, [&](wxMouseEvent& event)
+        {
+        });
 
     button2->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             // cancel
             Close();
         });
+
 
     button3->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
@@ -211,12 +250,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
             }
         });
 
-
-    picture->Bind(wxEVT_LEFT_DOWN, [&](wxMouseEvent& event)
-        {
-        });
-
-    picture->Bind(wxEVT_RIGHT_DOWN, [&](wxMouseEvent& event)
+    image_canvas->Bind(wxEVT_RIGHT_DOWN, [&](wxMouseEvent& event)
         {
             if (image.IsOk())
             {   
@@ -260,40 +294,6 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
         });
 }
 
-void CImageCustomDialog::setControlslayout()
-{
-    // set base sizer
-    this->SetSize(710, 710);
-    basePanel->SetSize(710, 710);
-    basePanel->SetSizer(baseSizer);
-
-    // add buttons to the horizontal box
-    vbox1->Add(button5);
-    vbox1->Add(button2);
-    vbox1->Add(button3);
-    vbox1->Add(button6);
-    vbox1->Add(button4);
-    vbox1->Add(button8);
-    vbox1->Add(button9);
-    vbox1->Add(button10);
-    vbox1->Add(button11);
-    vbox1->Add(button12);
-    vbox1->Add(button13);
-    vbox1->Add(button14);
-    vbox1->Add(button17);
-
-    vbox2->Add(picture, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);// wxALIGN_CENTER_HORIZONTAL
-
-    // set horizontal base sizer at panel1 and panel2
-    panel1->SetSizer(vbox1);
-    panel2->SetSizer(vbox2);
-
-    // add panel1 to the base sizer at the base panel
-    baseSizer->Add(panel1);
-    baseSizer->Add(panel2);
-
-    Center();
-}
 
 void CImageCustomDialog::loadImage()
 {
@@ -311,13 +311,8 @@ void CImageCustomDialog::loadImage()
         wxString path = openFileDialog.GetPath();
         wxImage tmp(path);
         image = tmp;
-
-        int w = image.GetWidth();
-        int h = image.GetHeight();
-
-        wxBitmap bitMap{ image };
-        picture->SetBitmap(bitMap);
-        picture->SetSize(w, h);
+        image_canvas->SetSize(CHILD_DEFAULT_W, CHILD_DEFAULT_H);
+        reloadImage();
     }
 }
 
@@ -325,14 +320,11 @@ void CImageCustomDialog::reloadImage()
 {
     if (image.IsOk() == true)
     {
-
         int w = image.GetWidth();
         int h = image.GetHeight();
-
         wxBitmap bitMap{ wxBitmap(image) };
-        picture->SetBitmap(bitMap);
-        picture->SetSize(w, h);
-
+        image_canvas->SetBitmap(bitMap);
+        image_canvas->SetSize(w, h);
     }
 }
 

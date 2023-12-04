@@ -26,6 +26,8 @@
 #include <chrono>
 #include "childframes.h"
 
+constexpr int APP_DEFAULT_W = 720;
+constexpr int APP_DEFAULT_H = 720;
 
 class MyFrame : public wxMDIParentFrame
 {

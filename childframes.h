@@ -32,6 +32,8 @@ using CPointCst = std::pair<int, int>;
 using CDataValue = std::vector<CPointCst>;
 using RGB_CST = unsigned char[3];
 
+constexpr int CHILD_DEFAULT_W = 710;
+constexpr int CHILD_DEFAULT_H = 710;
 
 class CDataCapture : public CDataValue
 {
@@ -97,15 +99,18 @@ private:
 
     wxImage image;
     wxImage backup;
-    wxStaticBitmap* picture = new wxStaticBitmap(   
+    wxStaticBitmap* image_canvas = new wxStaticBitmap(   
                                                     panel2, 
                                                     wxID_ANY, 
                                                     wxNullBitmap, 
                                                     { -1,-1 }, 
-                                                    {700,700}, 
-                                                    wxBORDER_SUNKEN);
+                                                    { CHILD_DEFAULT_W,CHILD_DEFAULT_H},
+                                                    wxBORDER_SUNKEN
+                                                    );
 
     void setControlslayout();
+
+    void setImageSize();
     bool changed = false;
 
     RGB_CST myrgb;
