@@ -3,7 +3,7 @@
 
 MyFrame::MyFrame():wxMDIParentFrame(nullptr, wxID_ANY, "Image Editor")
 {
-    SetClientSize(640, 480);
+    SetClientSize(1080, 960);
     wxInitAllImageHandlers();
 
     wxIcon icon("../../app.ico");
@@ -56,6 +56,7 @@ void MyFrame::OnOpen(wxCommandEvent & event)
 {
     CImageCustomDialog* tmp{ new CImageCustomDialog(this) };
     tmp->Show();
+    tmp->Maximize();
     mdi_panel_child_frames.push_back(tmp);
 }
 

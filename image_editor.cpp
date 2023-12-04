@@ -11,7 +11,11 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
 
     setControlslayout();
 
-    c.clear_me();
+
+    this->Bind(wxEVT_MAXIMIZE, [&](wxMaximizeEvent& event)
+        {
+
+        });
 
 
     button2->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
@@ -210,30 +214,10 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
 
     picture->Bind(wxEVT_LEFT_DOWN, [&](wxMouseEvent& event)
         {
-            if (capture == true)
-            {
-                if (image.IsOk())
-                {
-                    wxPoint p = event.GetPosition();
-                    int x = p.x;
-                    int y = p.y;
-                    wxSize s(5, 5);
-                    wxRect rect(p, s);
-                    image.SetRGB(rect, myrgb[0], myrgb[1], myrgb[2]);
-
-                    if (capture == true)
-                    {
-                        c.insertPoint(x, y);
-                    }
-
-                    reloadImage();
-                }
-            }
         });
 
     picture->Bind(wxEVT_RIGHT_DOWN, [&](wxMouseEvent& event)
         {
-
             if (image.IsOk())
             {   
                 wxColourDialog colourDialog(this);
@@ -249,34 +233,11 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
             }
         });
 
-    button15->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
-        {
-            if (image.IsOk())
-            {  
-                backup = image.Copy();
-                capture = true;
-            }
-        });
-
-    button16->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
-        {
-
-            if (capture == false)
-            {
-                return;
-            }
-
-            if (image.IsOk())
-            {                
-                capture = false;
-            }
-        });
-
     button17->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             if (image.IsOk())
             {
-                if (capture == true)
+                if (changed == false)
                 {
                     image.Clear();
                     image.Destroy();
@@ -288,23 +249,15 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                 }
                 else
                 {
-                    if (changed == true)
-                    {
-                        image = backup.Copy();
-                        reloadImage();
-                        changed = false;
-                        backup.Clear();
-                        backup.Destroy();
-                        backup = image.Copy();
-                    }
+                    image = backup.Copy();
+                    reloadImage();
+                    changed = false;
+                    backup.Clear();
+                    backup.Destroy();
+                    backup = image.Copy();
                 }
             }
         });
-}
-
-bool CImageCustomDialog::isPointAtRegion(int x, int y)
-{
-    return c.isPointInThePicture(x, y);
 }
 
 void CImageCustomDialog::setControlslayout()
@@ -327,8 +280,6 @@ void CImageCustomDialog::setControlslayout()
     vbox1->Add(button12);
     vbox1->Add(button13);
     vbox1->Add(button14);
-    vbox1->Add(button15);
-    vbox1->Add(button16);
     vbox1->Add(button17);
 
     vbox2->Add(picture, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);// wxALIGN_CENTER_HORIZONTAL
@@ -361,8 +312,8 @@ void CImageCustomDialog::loadImage()
         wxImage tmp(path);
         image = tmp;
 
-        w = image.GetWidth();
-        h = image.GetHeight();
+        int w = image.GetWidth();
+        int h = image.GetHeight();
 
         wxBitmap bitMap{ image };
         picture->SetBitmap(bitMap);
@@ -375,8 +326,8 @@ void CImageCustomDialog::reloadImage()
     if (image.IsOk() == true)
     {
 
-        w = image.GetWidth();
-        h = image.GetHeight();
+        int w = image.GetWidth();
+        int h = image.GetHeight();
 
         wxBitmap bitMap{ wxBitmap(image) };
         picture->SetBitmap(bitMap);

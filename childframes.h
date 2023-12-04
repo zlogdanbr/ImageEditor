@@ -70,15 +70,8 @@ public:
     void reloadImage();
 
     wxImage getImage() { return image; };
-    
-    CDataCapture getCDataCapture() { return c; };
 
 private:
-
-    bool isPointAtRegion(int x, int y);
-
-    int w = 0;
-    int h = 0;
 
     wxPanel* basePanel = new wxPanel(this, -1);
     wxPanel* panel1{ new wxPanel(basePanel) };
@@ -100,26 +93,19 @@ private:
     wxButton* button12{ new wxButton(panel1, wxID_ANY, "Blur") };
     wxButton* button13{ new wxButton(panel1, wxID_ANY, "Gray") };
     wxButton* button14{ new wxButton(panel1, wxID_ANY, "Color") };
-
-    wxButton* button15{ new wxButton(panel1, wxID_ANY, "Start") };
-    wxButton* button16{ new wxButton(panel1, wxID_ANY, "Stop") };
     wxButton* button17{ new wxButton(panel1, wxID_ANY, "Undo") };
-
-
 
     wxImage image;
     wxImage backup;
-    wxStaticBitmap* picture = new wxStaticBitmap(   panel2, wxID_ANY, wxNullBitmap, { -1,-1 }, {700,700}, wxBORDER_SUNKEN);
-
-    std::vector<int> resize_factor;
-
-    bool pog_mirror = false;
+    wxStaticBitmap* picture = new wxStaticBitmap(   
+                                                    panel2, 
+                                                    wxID_ANY, 
+                                                    wxNullBitmap, 
+                                                    { -1,-1 }, 
+                                                    {700,700}, 
+                                                    wxBORDER_SUNKEN);
 
     void setControlslayout();
-
-    CDataCapture c;
-
-    bool capture = false;
     bool changed = false;
 
     RGB_CST myrgb;
