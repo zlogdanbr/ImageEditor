@@ -1,4 +1,4 @@
-#include "jaca.h"
+#include "image_sizers.h"
 
 
 void CSizeKeepers::setSizeOfPanel(wxSize s, wxPanel* panel)

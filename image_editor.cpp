@@ -46,14 +46,6 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
 
     setControlslayout();
 
-    this->Bind(wxEVT_MAXIMIZE, [&](wxMaximizeEvent& event)
-        {
-        });
-
-    image_canvas->Bind(wxEVT_LEFT_DOWN, [&](wxMouseEvent& event)
-        {
-        });
-
     button2->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             // cancel
@@ -248,22 +240,22 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
             }
         });
 
-    image_canvas->Bind(wxEVT_RIGHT_DOWN, [&](wxMouseEvent& event)
-        {
-            if (image.IsOk())
-            {   
-                wxColourDialog colourDialog(this);
+    //image_canvas->Bind(wxEVT_RIGHT_DOWN, [&](wxMouseEvent& event)
+    //    {
+    //        if (image.IsOk())
+    //        {   
+    //            wxColourDialog colourDialog(this);
 
-                if (colourDialog.ShowModal() == wxID_OK) 
-                {
-                    wxColour color = colourDialog.GetColourData().GetColour();    
-                    myrgb[0] = color.GetRed();
-                    myrgb[1] = color.GetGreen();
-                    myrgb[2] = color.GetBlue();
+    //            if (colourDialog.ShowModal() == wxID_OK) 
+    //            {
+    //                wxColour color = colourDialog.GetColourData().GetColour();    
+    //                myrgb[0] = color.GetRed();
+    //                myrgb[1] = color.GetGreen();
+    //                myrgb[2] = color.GetBlue();
 
-                }
-            }
-        });
+    //            }
+    //        }
+    //    });
 
     button17->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
@@ -310,6 +302,7 @@ void CImageCustomDialog::loadImage()
         wxImage tmp(path);
         image = tmp;
         image_canvas->SetSize(CHILD_DEFAULT_W, CHILD_DEFAULT_H);
+        reloadImage();
         reloadImage();
     }
 }

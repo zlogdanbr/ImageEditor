@@ -27,7 +27,7 @@
 #include <queue>
 #include <stack>
 #include <deque>
-#include "jaca.h"
+#include "image_sizers.h"
 
 using CPointCst = std::pair<int, int>;
 using CDataValue = std::vector<CPointCst>;
@@ -114,9 +114,9 @@ private:
     bool changed = false;
 
     RGB_CST myrgb; 
+    wxColour color;
 
     CSizeKeepers CImage{ basePanel, panel1, panel2, image_canvas};
-
 
 };
 

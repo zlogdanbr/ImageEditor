@@ -10,7 +10,6 @@
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/artprov.h>
-#include<opencv2/highgui/highgui.hpp>
 #include <wx/aboutdlg.h>
 
 
