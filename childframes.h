@@ -27,6 +27,7 @@
 #include <queue>
 #include <stack>
 #include <deque>
+#include "jaca.h"
 
 using CPointCst = std::pair<int, int>;
 using CDataValue = std::vector<CPointCst>;
@@ -74,7 +75,7 @@ public:
     wxImage getImage() { return image; };
 
 private:
-
+    
     wxPanel* basePanel = new wxPanel(this, -1);
     wxPanel* panel1{ new wxPanel(basePanel) };
     wxPanel* panel2{ new wxPanel(basePanel, -1) };
@@ -110,10 +111,12 @@ private:
 
     void setControlslayout();
 
-    void setImageSize();
     bool changed = false;
 
-    RGB_CST myrgb;
+    RGB_CST myrgb; 
+
+    CSizeKeepers CImage{ basePanel, panel1, panel2, image_canvas};
+
 
 };
 

@@ -273,6 +273,7 @@ copy C:\Users\Administrador\Documents\GitHub\ImageEditor\x64\Release\diMageEdito
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="jaca.cpp" />
     <ClCompile Include="dmath.cpp" />
     <ClCompile Include="filesys.cpp" />
     <ClCompile Include="image_editor.cpp" />
@@ -282,6 +283,7 @@ copy C:\Users\Administrador\Documents\GitHub\ImageEditor\x64\Release\diMageEdito
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="childframes.h" />
+    <ClInclude Include="jaca.h" />
     <ClInclude Include="dmath.h" />
     <ClInclude Include="filesys.h" />
     <ClInclude Include="mainframe.h" />

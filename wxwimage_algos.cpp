@@ -23,7 +23,7 @@ wxImage scalePlusImage(wxImage& image, int scale, Dimensions& d)
     d.first = hn;
     d.second = wn;
 
-    wxImage image2 = image.Scale(hn, wn);
+    wxImage image2 = image.Scale(wn,hn);
     return image2;
 }
 
@@ -47,7 +47,7 @@ wxImage scaleLessImage(wxImage& image, int scale, Dimensions& d)
     d.first = hn;
     d.second = wn;
 
-    wxImage image2 = image.Scale(hn, wn);
+    wxImage image2 = image.Scale(wn,hn);
     return image2;
 }
 

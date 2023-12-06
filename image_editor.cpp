@@ -2,7 +2,6 @@
 #include "wxwimage_algos.h"
 #include <wx/colordlg.h>
 
-
 void CImageCustomDialog::setControlslayout()
 {
     // set base sizer
@@ -49,7 +48,6 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
 
     this->Bind(wxEVT_MAXIMIZE, [&](wxMaximizeEvent& event)
         {
-
         });
 
     image_canvas->Bind(wxEVT_LEFT_DOWN, [&](wxMouseEvent& event)
@@ -320,11 +318,7 @@ void CImageCustomDialog::reloadImage()
 {
     if (image.IsOk() == true)
     {
-        int w = image.GetWidth();
-        int h = image.GetHeight();
-        wxBitmap bitMap{ wxBitmap(image) };
-        image_canvas->SetBitmap(bitMap);
-        image_canvas->SetSize(w, h);
+        CImage.keepRatio(image);
     }
 }
 
