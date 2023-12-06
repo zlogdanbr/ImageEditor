@@ -274,7 +274,6 @@ copy C:\Users\Administrador\Documents\GitHub\ImageEditor\x64\Release\diMageEdito
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="image_sizers.cpp" />
-    <ClCompile Include="dmath.cpp" />
     <ClCompile Include="filesys.cpp" />
     <ClCompile Include="image_editor.cpp" />
     <ClCompile Include="main.cpp" />
@@ -284,7 +283,6 @@ copy C:\Users\Administrador\Documents\GitHub\ImageEditor\x64\Release\diMageEdito
   <ItemGroup>
     <ClInclude Include="childframes.h" />
     <ClInclude Include="image_sizers.h" />
-    <ClInclude Include="dmath.h" />
     <ClInclude Include="filesys.h" />
     <ClInclude Include="mainframe.h" />
     <ClInclude Include="wxwimage_algos.h" />
