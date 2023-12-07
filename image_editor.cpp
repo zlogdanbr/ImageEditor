@@ -23,6 +23,7 @@ void CImageCustomDialog::setControlslayout()
     vbox1->Add(button13);
     vbox1->Add(button14);
     vbox1->Add(button17);
+    vbox1->Add(button15);
 
     vbox2->Add( image_canvas, 
                 wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);// wxALIGN_CENTER_HORIZONTAL
@@ -45,6 +46,29 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
     memset(myrgb, 0x00, 3);
 
     setControlslayout();
+
+    button15->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
+        {
+            if (image.IsOk())
+            {
+
+/*
+    MyDrawingFrame( wxFrame* parent,
+                    wxImage _image,
+                    wxColor* _color,
+                    CImageCustomDialog* dialog);
+*/
+                wxColor color(myrgb[0], myrgb[1], myrgb[2]);
+                MyDrawingFrame* dframe{ new MyDrawingFrame( 
+                                                            this, 
+                                                            image, 
+                                                            &color
+                                                           ) 
+                                       };
+                dframe->Show(true);
+                reloadImage();
+            }
+        });
 
     button2->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {

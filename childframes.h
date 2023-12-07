@@ -28,6 +28,7 @@
 #include <stack>
 #include <deque>
 #include "image_sizers.h"
+#include "ovo.h"
 
 using CPointCst = std::pair<int, int>;
 using CDataValue = std::vector<CPointCst>;
@@ -97,6 +98,7 @@ private:
     wxButton* button13{ new wxButton(panel1, wxID_ANY, "Gray") };
     wxButton* button14{ new wxButton(panel1, wxID_ANY, "Color") };
     wxButton* button17{ new wxButton(panel1, wxID_ANY, "Undo") };
+    wxButton* button15{ new wxButton(panel1, wxID_ANY, "Edit Image") };
 
     wxImage image;
     wxImage backup;
