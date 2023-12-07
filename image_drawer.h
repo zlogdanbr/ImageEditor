@@ -2,11 +2,12 @@
 
 #include "wx/wx.h"
 
+using RGB = unsigned char[3];
 
 class MyDrawingFrame : public wxFrame
 {
 public:
-    MyDrawingFrame(wxFrame* parent, const wxImage& _image, wxColor* _color);
+    MyDrawingFrame(wxFrame* parent, const wxImage& _image, RGB myrgb );
 
 private:
 
@@ -21,7 +22,8 @@ private:
         wxBORDER_SUNKEN
     );
 
-    wxColor* color = nullptr;
+    RGB rgb;
     wxImage clone_image;
-
+    std::vector<wxPoint> pts;
+    void DrawFinally();
 };

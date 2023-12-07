@@ -28,7 +28,7 @@
 #include <stack>
 #include <deque>
 #include "image_sizers.h"
-#include "ovo.h"
+#include "image_drawer.h"
 
 using CPointCst = std::pair<int, int>;
 using CDataValue = std::vector<CPointCst>;

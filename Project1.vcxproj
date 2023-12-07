@@ -273,7 +273,7 @@ copy C:\Users\Administrador\Documents\GitHub\ImageEditor\x64\Release\diMageEdito
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ovo.cpp" />
+    <ClCompile Include="image_drawer.cpp" />
     <ClCompile Include="image_sizers.cpp" />
     <ClCompile Include="filesys.cpp" />
     <ClCompile Include="image_editor.cpp" />
@@ -283,7 +283,7 @@ copy C:\Users\Administrador\Documents\GitHub\ImageEditor\x64\Release\diMageEdito
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="childframes.h" />
-    <ClInclude Include="ovo.h" />
+    <ClInclude Include="image_drawer.h" />
     <ClInclude Include="image_sizers.h" />
     <ClInclude Include="filesys.h" />
     <ClInclude Include="mainframe.h" />

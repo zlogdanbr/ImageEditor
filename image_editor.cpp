@@ -43,7 +43,7 @@ void CImageCustomDialog::setControlslayout()
 CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFrame(parent, wxID_ANY, "Image Editor")
 {
 
-    memset(myrgb, 0x00, 3);
+    memset(myrgb, 0xFF, 3);
 
     setControlslayout();
 
@@ -51,18 +51,11 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
         {
             if (image.IsOk())
             {
-
-/*
-    MyDrawingFrame( wxFrame* parent,
-                    wxImage _image,
-                    wxColor* _color,
-                    CImageCustomDialog* dialog);
-*/
                 wxColor color(myrgb[0], myrgb[1], myrgb[2]);
                 MyDrawingFrame* dframe{ new MyDrawingFrame( 
                                                             this, 
                                                             image, 
-                                                            &color
+                                                            myrgb
                                                            ) 
                                        };
                 dframe->Show(true);
