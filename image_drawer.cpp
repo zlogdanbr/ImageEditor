@@ -128,15 +128,19 @@ void MyDrawingFrame::DrawFinally()
             wxPoint p(i, j);
             if (find(pts.begin(), pts.end(), p) != pts.end())
             {
-                clone_image.SetRGB(i, j, rgb[0], rgb[1], rgb[2]);
-                clone_image.SetRGB(i-1, j-1, rgb[0], rgb[1], rgb[2]);
-                clone_image.SetRGB(i+1, j+1, rgb[0], rgb[1], rgb[2]);
+                for (int k = 0; k < 5; k++)
+                {
+                    clone_image.SetRGB(i - k, j - k, rgb[0], rgb[1], rgb[2]);
+                    clone_image.SetRGB(i - k, j + k, rgb[0], rgb[1], rgb[2]);
+                    clone_image.SetRGB(i + k, j - k, rgb[0], rgb[1], rgb[2]);
+                    clone_image.SetRGB(i + k, j + k, rgb[0], rgb[1], rgb[2]);
+                }
             }
             if (find(circles.begin(), circles.end(), p) != circles.end())
             {
                 clone_image.SetRGB(i, j,0xFF, 0xEE, 0x00);
 
-                for (int k = 0; k < 5; k++)
+                for (int k = 0; k < 8; k++)
                 {
                     clone_image.SetRGB(i - k, j - k, 0xFF, 0xEE, 0x00);
                     clone_image.SetRGB(i - k, j + k, 0xFF, 0xEE, 0x00);
