@@ -29,7 +29,7 @@ MyDrawingFrame::MyDrawingFrame(wxFrame* parent, const wxImage& _image, RGB myrgb
             {
                 std::mutex mtex;
                 wxClientDC dc(image_canvas);
-                wxPen pen(*wxRED, 10); // red pen of width 1
+                wxPen pen(*wxRED, 5, wxPENSTYLE_SOLID); // red pen of width 1
                 dc.SetPen(pen);
                 auto p = event.GetPosition();
                 mtex.lock();
@@ -72,6 +72,8 @@ void MyDrawingFrame::DrawFinally()
             if (find(pts.begin(), pts.end(), p) != pts.end())
             {
                 clone_image.SetRGB(i, j, rgb[0], rgb[1], rgb[2]);
+                clone_image.SetRGB(i-1, j-1, rgb[0], rgb[1], rgb[2]);
+                clone_image.SetRGB(i+1, j+1, rgb[0], rgb[1], rgb[2]);
             }
         }
     }
