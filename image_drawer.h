@@ -25,5 +25,6 @@ private:
     RGB rgb;
     wxImage clone_image;
     std::vector<wxPoint> pts;
+    std::vector<wxPoint> circles;
     void DrawFinally();
 };
