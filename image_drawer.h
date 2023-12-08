@@ -1,6 +1,7 @@
 #pragma once
 
 #include "wx/wx.h"
+#include <stack>
 
 using RGB = unsigned char[3];
 
@@ -27,4 +28,6 @@ private:
     std::vector<wxPoint> pts;
     std::vector<wxPoint> circles;
     void DrawFinally();
+
+    std::stack<wxPoint> line;
 };

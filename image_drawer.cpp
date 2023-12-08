@@ -66,8 +66,35 @@ MyDrawingFrame::MyDrawingFrame(wxFrame* parent, const wxImage& _image, RGB myrgb
             mtex.lock();
             circles.push_back(p);
             mtex.unlock();
+            mtex.lock();
+            if (line.size() < 2)
+            {
+                line.push(p);
+            }
+            mtex.unlock();
             dc.DrawCircle(event.GetPosition(), r);           
             dc.SetPen(wxNullPen);
+        });
+
+    image_canvas->Bind(wxEVT_MOUSEWHEEL, [&](wxMouseEvent& event)
+        {
+            if (line.size() == 2)
+            {
+                std::mutex mtex;
+                mtex.lock();
+                wxPoint p1 = line.top();
+                line.pop();
+                wxPoint p2 = line.top();
+                line.pop();
+                mtex.unlock();
+                
+                wxClientDC dc(image_canvas);
+                wxPen pen(*wxRED, 5, wxPENSTYLE_SOLID); // red pen of width 1
+                dc.SetPen(pen);
+                auto p = event.GetPosition();
+                dc.DrawLine(p1, p2);
+                dc.SetPen(wxNullPen);
+            }
         });
 
     image_canvas->Bind(wxEVT_RIGHT_DOWN, [&](wxMouseEvent& event)
