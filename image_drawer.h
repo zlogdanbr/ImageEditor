@@ -28,11 +28,27 @@ private:
     std::vector<wxPoint> pts;
     std::vector<wxPoint> circles;
     std::vector<int> radiuses;
+
+    struct myrect
+    {
+        wxPoint p1;
+        wxPoint p2;
+        wxPoint p3;
+        wxPoint p4;
+    };
+
+    wxPoint sPos;
+
+    myrect RectTangle;
+
     void DrawFinally();
 
     std::stack<wxPoint> line;
     void putpixel(int i, int j, RGB& r);
     void drawcircle(int x0, int y0, int radius, wxImage img, RGB& r);
+    void saveRectangle();
+    void saveArea();
 
-    void saveRectangle(wxRect& rect);
+    void drawLineHorizontal(wxKeyEvent& event, int direction);
+    void drawLineVertical(wxKeyEvent& event, int direction);
 };

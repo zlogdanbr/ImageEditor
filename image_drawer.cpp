@@ -22,6 +22,10 @@ MyDrawingFrame::MyDrawingFrame(wxFrame* parent, const wxImage& _image, RGB myrgb
     wxBitmap bitMap{ wxBitmap(clone_image) };
     image_canvas->SetSize(_image.GetWidth(), _image.GetHeight());
     image_canvas->SetBitmap(bitMap);
+    image_canvas->SetFocus();
+
+    sPos.x = 0;
+    sPos.y = 0;
 
     pts.clear();
     circles.clear();
@@ -67,7 +71,7 @@ MyDrawingFrame::MyDrawingFrame(wxFrame* parent, const wxImage& _image, RGB myrgb
             circles.push_back(p);
             mtex.unlock();
             mtex.lock();
-            if (line.size() < 2)
+            if (line.size() < 4)
             {
                 line.push(p);
             }
@@ -81,40 +85,31 @@ MyDrawingFrame::MyDrawingFrame(wxFrame* parent, const wxImage& _image, RGB myrgb
 
     image_canvas->Bind(wxEVT_MOUSEWHEEL, [&](wxMouseEvent& event)
         {
-            if (line.size() == 2)
+            if (line.size() == 4)
             {
                 std::mutex mtex;
                 mtex.lock();
-                wxPoint p1 = line.top();
+                RectTangle.p1 = line.top();
                 line.pop();
-                wxPoint p2 = line.top();
+                RectTangle.p2 = line.top();
+                line.pop();
+                RectTangle.p3 = line.top();
+                line.pop();
+                RectTangle.p4 = line.top();
                 line.pop();
                 mtex.unlock();
                 
                 wxClientDC dc(image_canvas);
-                wxPen pen(*wxRED, 5, wxPENSTYLE_SOLID); // red pen of width 1
+                wxPen pen(*wxRED, 5, wxPENSTYLE_DOT); // red pen of width 1
                 dc.SetPen(pen);
                 auto p = event.GetPosition();
-                wxRect rec(p1, p2);
-                dc.DrawRectangle(rec);
+                wxRect rec(RectTangle.p1, RectTangle.p2);
+                dc.DrawLine(RectTangle.p1, RectTangle.p2);
+                dc.DrawLine(RectTangle.p2, RectTangle.p3);
+                dc.DrawLine(RectTangle.p3, RectTangle.p4);
+                dc.DrawLine(RectTangle.p4, RectTangle.p1);
+
                 dc.SetPen(wxNullPen);
-
-                wxMessageDialog dialog(this, "Save new image?", "Save new image?", wxYES_NO | wxCANCEL);
-
-                switch (dialog.ShowModal())
-                {
-                    case wxID_YES:
-                        saveRectangle(rec);
-                        break;
-
-                    case wxID_NO:
-                        wxLogStatus("You pressed \"No\"");
-                        break;
-
-                    case wxID_CANCEL:
-                        wxLogStatus("You pressed \"Cancel\"");
-                        break;
-                }
                 
             }
         });
@@ -139,10 +134,141 @@ MyDrawingFrame::MyDrawingFrame(wxFrame* parent, const wxImage& _image, RGB myrgb
             }
         });
 
+    image_canvas->Bind(wxEVT_RIGHT_DOWN, [&](wxMouseEvent& event)
+        {
+            DrawFinally();
+            wxFileDialog saveFileDialog(this,
+                wxEmptyString,
+                wxEmptyString,
+                "MyFile.jpg", "Text Files (*.jpg)|*.jpg|All Files (*.*)|*.*",
+                wxFD_SAVE);
+            if (saveFileDialog.ShowModal() == wxID_OK)
+            {
+                wxString path = saveFileDialog.GetPath();
+                wxImage tmp;
+                tmp = clone_image.Copy();
+                tmp.SaveFile(path, wxBITMAP_TYPE_JPEG);
+                clone_image.Destroy();
+                tmp.Destroy();
+                Close();
+            }
+        });
+
+    image_canvas->Bind(wxEVT_KEY_DOWN, [&](wxKeyEvent& event)
+        {
+            if (event.GetEventType() == wxEVT_KEY_DOWN)
+            {
+                auto key = ((wxKeyEvent&)event).GetKeyCode();
+                if ( key == 'S' || key == 's')
+                {
+                    saveArea();
+                    return;
+                }
+
+                if (key == 'd' || key == 'D')
+                {
+                    drawLineHorizontal(event, 1);
+                    return;
+                }
+
+                if (key == 'a' || key == 'A')
+                {
+                    drawLineHorizontal(event, -1);
+                    return;
+                }
+
+                if (key == 'u' || key == 'U')
+                {
+                    drawLineVertical(event, -1);
+                    return;
+                }
+
+                if (key == 'b' || key == 'B')
+                {
+                    drawLineVertical(event, 1);
+                    return;
+                }
+            }
+
+
+        });
+
 }
 
-void MyDrawingFrame::saveRectangle(wxRect& rect)
+void MyDrawingFrame::drawLineVertical(wxKeyEvent& event, int direction)
 {
+    std::mutex mtex;
+    wxClientDC dc(image_canvas);
+    wxPen pen(*wxRED, 5, wxPENSTYLE_SOLID); // red pen of width 1
+    dc.SetPen(pen);
+
+    wxPoint p;
+    if (sPos.x == 0 && sPos.y == 0)
+    {
+        p = event.GetPosition();
+        sPos = p;
+    }
+    else
+    {
+        sPos.y = sPos.y + direction;
+        p = sPos;
+    }
+
+    dc.DrawPoint(p);
+    dc.SetPen(wxNullPen);
+}
+
+void MyDrawingFrame::drawLineHorizontal(wxKeyEvent& event, int direction)
+{
+    std::mutex mtex;
+    wxClientDC dc(image_canvas);
+    wxPen pen(*wxRED, 5, wxPENSTYLE_SOLID); // red pen of width 1
+    dc.SetPen(pen);
+
+    wxPoint p;
+    if (sPos.x == 0 && sPos.y == 0)
+    {
+        p = event.GetPosition();
+        sPos = p;
+    }
+    else
+    {
+        sPos.x = sPos.x + direction;
+        p = sPos;
+    }
+
+    dc.DrawPoint(p);
+    dc.SetPen(wxNullPen);
+}
+
+void MyDrawingFrame::saveArea()
+{
+    wxMessageDialog dialog(this, "Save new image?", "Save new image?", wxYES_NO | wxCANCEL);
+
+    switch (dialog.ShowModal())
+    {
+    case wxID_YES:
+        saveRectangle();
+        break;
+
+    case wxID_NO:
+        wxLogStatus("You pressed \"No\"");
+        break;
+
+    case wxID_CANCEL:
+        wxLogStatus("You pressed \"Cancel\"");
+        break;
+    }
+
+}
+
+void MyDrawingFrame::saveRectangle()
+{
+    auto p1 = RectTangle.p1;
+    auto p3 = RectTangle.p3;
+
+    wxRect rect(p1, p3);
+
     wxFileDialog saveFileDialog(this,
         wxEmptyString,
         wxEmptyString,
@@ -221,3 +347,4 @@ void MyDrawingFrame::DrawFinally()
         i++;
     }
 }
+
