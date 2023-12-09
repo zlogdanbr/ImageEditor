@@ -72,6 +72,9 @@ MyDrawingFrame::MyDrawingFrame(wxFrame* parent, const wxImage& _image, RGB myrgb
                 line.push(p);
             }
             mtex.unlock();
+            mtex.lock();
+            radiuses.push_back(radius);
+            mtex.unlock();
             dc.DrawCircle(event.GetPosition(), r);           
             dc.SetPen(wxNullPen);
         });
@@ -119,6 +122,48 @@ MyDrawingFrame::MyDrawingFrame(wxFrame* parent, const wxImage& _image, RGB myrgb
 
 }
 
+void MyDrawingFrame::putpixel(int i, int j, RGB& r)
+{
+    clone_image.SetRGB(i, j, rgb[0], rgb[1], rgb[2]);
+}
+
+//------------------------------------------------------------------------
+// Mid Point Algorithm for circles
+// https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
+// Adapted from 
+// https://www.thecrazyprogrammer.com/2016/12/bresenhams-midpoint-circle-algorithm-c-c.html
+//------------------------------------------------------------------------
+void MyDrawingFrame::drawcircle(int x0, int y0, int radius, wxImage img, RGB& r)
+{
+    int x = radius;
+    int y = 0;
+    int err = 0;
+
+    while (x >= y)
+    {
+        putpixel(x0 + x, y0 + y, r);
+        putpixel(x0 + y, y0 + x, r);
+        putpixel(x0 - y, y0 + x, r);
+        putpixel(x0 - x, y0 + y, r);
+        putpixel(x0 - x, y0 - y, r);
+        putpixel(x0 - y, y0 - x, r);
+        putpixel(x0 + y, y0 - x, r);
+        putpixel(x0 + x, y0 - y, r);
+
+        if (err <= 0)
+        {
+            y += 1;
+            err += 2 * y + 1;
+        }
+
+        if (err > 0)
+        {
+            x -= 1;
+            err -= 2 * x + 1;
+        }
+    }
+}
+
 void MyDrawingFrame::DrawFinally()
 {
     for (int i = 0; i < clone_image.GetWidth(); i++)
@@ -128,26 +173,15 @@ void MyDrawingFrame::DrawFinally()
             wxPoint p(i, j);
             if (find(pts.begin(), pts.end(), p) != pts.end())
             {
-                for (int k = 0; k < 5; k++)
-                {
-                    clone_image.SetRGB(i - k, j - k, rgb[0], rgb[1], rgb[2]);
-                    clone_image.SetRGB(i - k, j + k, rgb[0], rgb[1], rgb[2]);
-                    clone_image.SetRGB(i + k, j - k, rgb[0], rgb[1], rgb[2]);
-                    clone_image.SetRGB(i + k, j + k, rgb[0], rgb[1], rgb[2]);
-                }
-            }
-            if (find(circles.begin(), circles.end(), p) != circles.end())
-            {
-                clone_image.SetRGB(i, j,0xFF, 0xEE, 0x00);
-
-                for (int k = 0; k < 8; k++)
-                {
-                    clone_image.SetRGB(i - k, j - k, 0xFF, 0xEE, 0x00);
-                    clone_image.SetRGB(i - k, j + k, 0xFF, 0xEE, 0x00);
-                    clone_image.SetRGB(i + k, j - k, 0xFF, 0xEE, 0x00);
-                    clone_image.SetRGB(i + k, j + k, 0xFF, 0xEE, 0x00);
-                }
+                putpixel(i, j, rgb);
             }
         }
+    }
+
+    int i = 0;
+    for (const auto& c : circles)
+    {
+        drawcircle(c.x, c.y, radiuses[i], clone_image, rgb);
+        i++;
     }
 }
