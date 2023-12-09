@@ -95,8 +95,27 @@ MyDrawingFrame::MyDrawingFrame(wxFrame* parent, const wxImage& _image, RGB myrgb
                 wxPen pen(*wxRED, 5, wxPENSTYLE_SOLID); // red pen of width 1
                 dc.SetPen(pen);
                 auto p = event.GetPosition();
-                dc.DrawLine(p1, p2);
+                wxRect rec(p1, p2);
+                dc.DrawRectangle(rec);
                 dc.SetPen(wxNullPen);
+
+                wxMessageDialog dialog(this, "Save new image?", "Save new image?", wxYES_NO | wxCANCEL);
+
+                switch (dialog.ShowModal())
+                {
+                    case wxID_YES:
+                        saveRectangle(rec);
+                        break;
+
+                    case wxID_NO:
+                        wxLogStatus("You pressed \"No\"");
+                        break;
+
+                    case wxID_CANCEL:
+                        wxLogStatus("You pressed \"Cancel\"");
+                        break;
+                }
+                
             }
         });
 
@@ -120,6 +139,23 @@ MyDrawingFrame::MyDrawingFrame(wxFrame* parent, const wxImage& _image, RGB myrgb
             }
         });
 
+}
+
+void MyDrawingFrame::saveRectangle(wxRect& rect)
+{
+    wxFileDialog saveFileDialog(this,
+        wxEmptyString,
+        wxEmptyString,
+        "MyFile.jpg", "Text Files (*.jpg)|*.jpg|All Files (*.*)|*.*",
+        wxFD_SAVE);
+    if (saveFileDialog.ShowModal() == wxID_OK)
+    {
+        wxString path = saveFileDialog.GetPath();
+        wxImage tmp = clone_image.GetSubImage(rect);
+        tmp.SaveFile(path, wxBITMAP_TYPE_JPEG);
+        tmp.Destroy();
+        Close();
+    }
 }
 
 void MyDrawingFrame::putpixel(int i, int j, RGB& r)

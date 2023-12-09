@@ -33,4 +33,6 @@ private:
     std::stack<wxPoint> line;
     void putpixel(int i, int j, RGB& r);
     void drawcircle(int x0, int y0, int radius, wxImage img, RGB& r);
+
+    void saveRectangle(wxRect& rect);
 };
