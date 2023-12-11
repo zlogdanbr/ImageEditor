@@ -273,23 +273,23 @@ copy C:\Users\Administrador\Documents\GitHub\ImageEditor\x64\Release\diMageEdito
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="image_drawer.cpp" />
     <ClCompile Include="image_draweropencv.cpp" />
     <ClCompile Include="image_sizers.cpp" />
     <ClCompile Include="filesys.cpp" />
     <ClCompile Include="image_editor.cpp" />
+    <ClCompile Include="image_util.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainframe.cpp" />
-    <ClCompile Include="wxwimage_algos.cpp" />
+    <ClCompile Include="image_acton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="childframes.h" />
-    <ClInclude Include="image_drawer.h" />
     <ClInclude Include="image_draweropencv.h" />
     <ClInclude Include="image_sizers.h" />
     <ClInclude Include="filesys.h" />
+    <ClInclude Include="image_util.h" />
     <ClInclude Include="mainframe.h" />
-    <ClInclude Include="wxwimage_algos.h" />
+    <ClInclude Include="image_acton.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

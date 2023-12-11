@@ -1,4 +1,4 @@
-#include "wxwimage_algos.h"
+#include "image_acton.h"
 #include "wx/image.h"
 
 wxImage rotate_left(wxImage& image)

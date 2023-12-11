@@ -27,7 +27,4 @@ public:
 
 private:
 	Mat _img;
-
-	wxImage wx_from_mat(Mat& img) const;
-	Mat mat_from_wx(wxImage& wx) const;
 };

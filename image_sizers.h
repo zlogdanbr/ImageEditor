@@ -22,12 +22,9 @@ public:
 	{
 	}
 
-
 	void setSizeOfPanel(wxSize s, wxPanel* panel);
 	wxSize getSizeOfPanel(wxPanel* panel);
-
 	void keepRatio( wxImage& image);
-
 
 private:
 
@@ -35,6 +32,5 @@ private:
 	wxPanel* left = nullptr;
 	wxPanel* right = nullptr;
 	wxStaticBitmap* image_canvas = nullptr;
-
 
 };

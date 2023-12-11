@@ -28,40 +28,9 @@
 #include <stack>
 #include <deque>
 #include "image_sizers.h"
-#include "image_drawer.h"
-
-using CPointCst = std::pair<int, int>;
-using CDataValue = std::vector<CPointCst>;
-using RGB_CST = unsigned char[3];
 
 constexpr int CHILD_DEFAULT_W = 710;
 constexpr int CHILD_DEFAULT_H = 710;
-
-class CDataCapture : public CDataValue
-{
-public:
-    void insertPoint(int x, int y)
-    {
-        CPointCst p{ x,y };
-        this->push_back(p);
-    }
-
-    void clear_me()
-    {
-        this->clear();
-    }
-
-    bool isPointInThePicture(int x, int y)
-    {
-        CPointCst p(x, y);
-        if (std::find(this->begin(), this->end(), p) != this->end())
-        {
-            return true;
-        }
-        return false;
-    }
-};
-
 
 class CImageCustomDialog : public wxMDIChildFrame
 {
@@ -72,7 +41,6 @@ public:
     void loadImage();
     void SaveImage();
     void reloadImage();
-
     wxImage getImage() { return image; };
 
 private:
@@ -99,6 +67,7 @@ private:
     wxButton* button14{ new wxButton(panel1, wxID_ANY, "Color") };
     wxButton* button17{ new wxButton(panel1, wxID_ANY, "Undo") };
     wxButton* button15{ new wxButton(panel1, wxID_ANY, "Select") };
+    wxButton* button16{ new wxButton(panel1, wxID_ANY, "Edit") };
 
     wxImage image;
     wxImage backup;
@@ -115,10 +84,16 @@ private:
 
     bool changed = false;
 
-    RGB_CST myrgb; 
-    wxColour color;
-
     CSizeKeepers CImage{ basePanel, panel1, panel2, image_canvas};
+
+    void doscaleLess(wxNumberEntryDialog& dialog);
+    void doscalePlus(wxNumberEntryDialog& dialog);
+    void dorotateLeft();
+    void dorotateRight();
+    void doblurH(wxNumberEntryDialog& dialog);
+    void doblurv(wxNumberEntryDialog& dialog);
+    void doblur(wxNumberEntryDialog& dialog);
+    void ConverImageToGray();
 
 };
 

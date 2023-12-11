@@ -1,80 +1,30 @@
 #include "childframes.h"
-#include "wxwimage_algos.h"
 #include <wx/colordlg.h>
+#include "image_acton.h"
 #include "image_draweropencv.h"
-
-void CImageCustomDialog::setControlslayout()
-{
-    // set base sizer
-    this->SetSize(CHILD_DEFAULT_W, CHILD_DEFAULT_H);
-    basePanel->SetSize(CHILD_DEFAULT_W, CHILD_DEFAULT_H);
-    basePanel->SetSizer(baseSizer);
-
-    // add buttons to the horizontal box
-    vbox1->Add(button5);
-    vbox1->Add(button2);
-    vbox1->Add(button3);
-    vbox1->Add(button6);
-    vbox1->Add(button4);
-    vbox1->Add(button8);
-    vbox1->Add(button9);
-    vbox1->Add(button10);
-    vbox1->Add(button11);
-    vbox1->Add(button12);
-    vbox1->Add(button13);
-    vbox1->Add(button14);
-    vbox1->Add(button17);
-    vbox1->Add(button15);
-
-    vbox2->Add( image_canvas, 
-                wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);// wxALIGN_CENTER_HORIZONTAL
-
-    // set horizontal base sizer at panel1 and panel2
-    panel1->SetSizer(vbox1);
-    panel2->SetSizer(vbox2);
-
-    // add panel1 to the base sizer at the base panel
-    baseSizer->Add(panel1);
-    baseSizer->Add(panel2);
-
-    Center();
-}
-
 
 CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFrame(parent, wxID_ANY, "Image Editor")
 {
-
-    memset(myrgb, 0xFF, 3);
-
     setControlslayout();
 
+    // captures ROI
     button15->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             if (image.IsOk())
             {
-                //wxColor color(myrgb[0], myrgb[1], myrgb[2]);
-                //MyDrawingFrame* dframe{ new MyDrawingFrame( 
-                //                                            this, 
-                //                                            image, 
-                //                                            myrgb
-                //                                           ) 
-                //                       };
-                //dframe->Show(true);
-                //reloadImage();
-
                 CDrawerOpenCV cdrawer(image);
                 std::string s = "Edit";
                 cdrawer.showImage(s);
             }
         });
 
+    // close current frame
     button2->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
-            // cancel
             Close();
         });
 
-
+    // scale less 
     button3->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             if (image.IsOk())
@@ -83,14 +33,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
 
                 if (dialog.ShowModal() == wxID_OK)
                 {
-                    backup = image.Copy();
-                    auto scale = static_cast<int>(dialog.GetValue());
-                    Dimensions d;
-                    wxImage image2 = scaleLessImage(image, scale, d);
-                    image = image2.Copy();
-                    image2.Clear();
-                    reloadImage();
-                    changed = true;
+                    doscaleLess(dialog);
                     return;
                 }
                 changed = false;
@@ -98,6 +41,7 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
 
         });
 
+    // scale plus
     button6->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             if (image.IsOk())
@@ -106,89 +50,68 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
 
                 if (dialog.ShowModal() == wxID_OK)
                 {
-                    backup = image.Copy();
-                    auto scale = static_cast<int>(dialog.GetValue());                    
-                    Dimensions d;
-                    wxImage image2 = scalePlusImage(image, scale, d);
-                    image = image2.Copy();
-                    image2.Clear();
-                    reloadImage();
-                    changed = true;
+                    doscalePlus(dialog);
                     return;
                 }
                 changed = false;
             }
         });
 
+    // Save Image
     button4->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             if (image.IsOk())
             {
                 SaveImage();
             }
-
         });
 
+    // load image
     button5->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             loadImage();
             backup = image.Copy();
         });
 
+    // rotate left
     button8->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             if (image.IsOk())
             {
-                backup = image.Copy();
-                wxImage image2 = image.Rotate90(true);
-                image = image2.Copy();
-                image2.Clear();
-                image2.Destroy();
-                reloadImage();
-                changed = true;
+                dorotateLeft();
                 return;
             }
             changed = false;
         });
 
+    // rotate right
     button9->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             if (image.IsOk())
             {
-                backup = image.Copy();
-                wxImage image2 = rotate_right(image);
-                image = image2.Copy();
-                image2.Clear();
-                image2.Destroy();
-                reloadImage();
-                changed = true;
+                dorotateRight();
                 return;
             }
             changed = false;
         });
 
+    // blur H
     button10->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
-            int alpha = 30;
             if (image.IsOk())
             {
                 wxNumberEntryDialog dialog(this, "Scale Factor", "Choose Scale Factor", "Scale Factor", 2, 1, 100);
 
                 if (dialog.ShowModal() == wxID_OK)
                 {
-                    backup = image.Copy();
-                    auto scale = static_cast<int>(dialog.GetValue());
-                    wxImage image2 = BlurH(image, scale);
-                    image = image2.Copy();
-                    image2.Clear();
-                    reloadImage();
-                    changed = true;
+                    doblurH(dialog);
                     return;
                 }
             }
             changed = false;
         });
 
+    // blur V
     button11->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             if (image.IsOk())
@@ -196,19 +119,14 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                 wxNumberEntryDialog dialog(this, "Scale Factor", "Choose Scale Factor", "Scale Factor", 2, 1, 100);
                 if (dialog.ShowModal() == wxID_OK)
                 {
-                    backup = image.Copy();
-                    auto scale = static_cast<int>(dialog.GetValue());
-                    wxImage image2 = BlurV(image, scale);
-                    image = image2.Copy();
-                    image2.Clear();
-                    reloadImage();
-                    changed = true;
+                    doblurv(dialog);
                     return;
                 }
             }
             changed = false;
         });
 
+    // blur
     button12->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             if (image.IsOk())
@@ -216,69 +134,26 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
                 wxNumberEntryDialog dialog(this, "Scale Factor", "Choose Scale Factor", "Scale Factor", 2, 1, 100);
                 if (dialog.ShowModal() == wxID_OK)
                 {
-                    backup = image.Copy();
-                    auto scale = static_cast<int>(dialog.GetValue());
-                    wxImage image2 = Blur(image, scale);
-                    image = image2.Copy();
-                    image2.Clear();
-                    reloadImage();
-                    changed = true;
+                    doblur(dialog);
                     return;
                 }
             }
             changed = false;
         });
 
+    // conver to gray
     button13->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             if (image.IsOk())
             {
-                backup = image.Copy();
-                wxImage image2 = ConvertToGrayScale(image);
-                image = image2.Copy();
-                image2.Clear();
-                image2.Destroy();
-                reloadImage();
-                changed = true;                
+                ConverImageToGray();
                 return;
             }
 
             changed = false;
         });
 
-    button14->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
-        {
-            if (image.IsOk())
-            {
-                wxColourDialog colourDialog(this);
-
-                if (colourDialog.ShowModal() == wxID_OK)
-                {
-                    wxColour color = colourDialog.GetColourData().GetColour();
-                    myrgb[0] = color.GetRed();
-                    myrgb[1] = color.GetGreen();
-                    myrgb[2] = color.GetBlue();
-                }
-            }
-        });
-
-    //image_canvas->Bind(wxEVT_RIGHT_DOWN, [&](wxMouseEvent& event)
-    //    {
-    //        if (image.IsOk())
-    //        {   
-    //            wxColourDialog colourDialog(this);
-
-    //            if (colourDialog.ShowModal() == wxID_OK) 
-    //            {
-    //                wxColour color = colourDialog.GetColourData().GetColour();    
-    //                myrgb[0] = color.GetRed();
-    //                myrgb[1] = color.GetGreen();
-    //                myrgb[2] = color.GetBlue();
-
-    //            }
-    //        }
-    //    });
-
+    // restore last
     button17->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event)
         {
             if (image.IsOk())
@@ -305,6 +180,134 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
             }
         });
 }
+
+void CImageCustomDialog::doscaleLess(wxNumberEntryDialog& dialog)
+{
+    backup = image.Copy();
+    auto scale = static_cast<int>(dialog.GetValue());
+    Dimensions d;
+    wxImage image2 = scaleLessImage(image, scale, d);
+    image = image2.Copy();
+    image2.Clear();
+    reloadImage();
+    changed = true;
+}
+
+void CImageCustomDialog::doscalePlus(wxNumberEntryDialog& dialog)
+{
+    backup = image.Copy();
+    auto scale = static_cast<int>(dialog.GetValue());
+    Dimensions d;
+    wxImage image2 = scalePlusImage(image, scale, d);
+    image = image2.Copy();
+    image2.Clear();
+    reloadImage();
+    changed = true;
+}
+
+void CImageCustomDialog::dorotateLeft()
+{
+    backup = image.Copy();
+    // rotate_left
+    wxImage image2 = rotate_left(image);
+    image = image2.Copy();
+    image2.Clear();
+    image2.Destroy();
+    reloadImage();
+    changed = true;
+}
+
+void CImageCustomDialog::dorotateRight()
+{
+    backup = image.Copy();
+    wxImage image2 = rotate_right(image);
+    image = image2.Copy();
+    image2.Clear();
+    image2.Destroy();
+    reloadImage();
+    changed = true;
+}
+
+void CImageCustomDialog::doblurH(wxNumberEntryDialog& dialog)
+{
+    backup = image.Copy();
+    auto scale = static_cast<int>(dialog.GetValue());
+    wxImage image2 = BlurH(image, scale);
+    image = image2.Copy();
+    image2.Clear();
+    reloadImage();
+    changed = true;
+}
+
+void CImageCustomDialog::doblurv(wxNumberEntryDialog& dialog)
+{
+    backup = image.Copy();
+    auto scale = static_cast<int>(dialog.GetValue());
+    wxImage image2 = BlurV(image, scale);
+    image = image2.Copy();
+    image2.Clear();
+    reloadImage();
+    changed = true;
+}
+
+void CImageCustomDialog::doblur(wxNumberEntryDialog& dialog)
+{
+    backup = image.Copy();
+    auto scale = static_cast<int>(dialog.GetValue());
+    wxImage image2 = Blur(image, scale);
+    image = image2.Copy();
+    image2.Clear();
+    reloadImage();
+    changed = true;
+}
+
+void CImageCustomDialog::ConverImageToGray()
+{
+    backup = image.Copy();
+    wxImage image2 = ConvertToGrayScale(image);
+    image = image2.Copy();
+    image2.Clear();
+    image2.Destroy();
+    reloadImage();
+    changed = true;
+}
+
+void CImageCustomDialog::setControlslayout()
+{
+    // set base sizer
+    this->SetSize(CHILD_DEFAULT_W, CHILD_DEFAULT_H);
+    basePanel->SetSize(CHILD_DEFAULT_W, CHILD_DEFAULT_H);
+    basePanel->SetSizer(baseSizer);
+
+    // add buttons to the horizontal box
+    vbox1->Add(button5);
+    vbox1->Add(button4);
+    vbox1->Add(button2);
+    vbox1->Add(button3);
+    vbox1->Add(button6);
+    vbox1->Add(button8);
+    vbox1->Add(button9);
+    vbox1->Add(button10);
+    vbox1->Add(button11);
+    vbox1->Add(button12);
+    vbox1->Add(button13);
+    vbox1->Add(button17);
+    vbox1->Add(button15);
+
+    vbox2->Add(image_canvas,
+        wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL);// wxALIGN_CENTER_HORIZONTAL
+
+    // set horizontal base sizer at panel1 and panel2
+    panel1->SetSizer(vbox1);
+    panel2->SetSizer(vbox2);
+
+    // add panel1 to the base sizer at the base panel
+    baseSizer->Add(panel1);
+    baseSizer->Add(panel2);
+
+    Center();
+}
+
 
 
 void CImageCustomDialog::loadImage()
