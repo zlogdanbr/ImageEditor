@@ -1,6 +1,7 @@
 #include "childframes.h"
 #include "wxwimage_algos.h"
 #include <wx/colordlg.h>
+#include "image_draweropencv.h"
 
 void CImageCustomDialog::setControlslayout()
 {
@@ -51,15 +52,19 @@ CImageCustomDialog::CImageCustomDialog(wxMDIParentFrame* parent) :wxMDIChildFram
         {
             if (image.IsOk())
             {
-                wxColor color(myrgb[0], myrgb[1], myrgb[2]);
-                MyDrawingFrame* dframe{ new MyDrawingFrame( 
-                                                            this, 
-                                                            image, 
-                                                            myrgb
-                                                           ) 
-                                       };
-                dframe->Show(true);
-                reloadImage();
+                //wxColor color(myrgb[0], myrgb[1], myrgb[2]);
+                //MyDrawingFrame* dframe{ new MyDrawingFrame( 
+                //                                            this, 
+                //                                            image, 
+                //                                            myrgb
+                //                                           ) 
+                //                       };
+                //dframe->Show(true);
+                //reloadImage();
+
+                CDrawerOpenCV cdrawer(image);
+                std::string s = "Edit";
+                cdrawer.showImage(s);
             }
         });
 

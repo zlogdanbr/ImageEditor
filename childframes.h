@@ -98,7 +98,7 @@ private:
     wxButton* button13{ new wxButton(panel1, wxID_ANY, "Gray") };
     wxButton* button14{ new wxButton(panel1, wxID_ANY, "Color") };
     wxButton* button17{ new wxButton(panel1, wxID_ANY, "Undo") };
-    wxButton* button15{ new wxButton(panel1, wxID_ANY, "Edit Image") };
+    wxButton* button15{ new wxButton(panel1, wxID_ANY, "Select") };
 
     wxImage image;
     wxImage backup;
