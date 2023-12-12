@@ -16,7 +16,7 @@ void CDrawerOpenCV::showImage(const std::string& title)
     */
 
     Mat clone = _img.clone();
-    Rect rect = selectROI(title, _img,false);
+    Rect rect = selectROI(title, clone,false);
     Mat roi = Mat(clone, rect);
 
     waitKey(0);
